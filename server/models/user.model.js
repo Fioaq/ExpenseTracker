@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 
 const UserSchema = new mongoose.Schema({
-
     firstName: {
         type: String,
         trim: true,
@@ -33,10 +32,14 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: [true, "La contraseña es obligatoria."],
         minLength: [8, "La contraseña debe tener mas de 8 caracteres."],
+        validate: {
+            validator: (val) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-=_+{};:'",.<>/?[\]`|~]).{8,}$/.test(val),
+            message: "La contraseña debe tener al menos una mayúscula, una minúscula, un número y un caracter especial"
+        }
     },
-    posts: [{
-        type: mongoose.Types.ObjectId,
-        ref: "Post"
+    transactions: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Transactions"
     }],
     passwordChangeAt: Date,
     passwordResetToken: String,

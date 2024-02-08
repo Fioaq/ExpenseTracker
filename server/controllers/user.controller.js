@@ -83,7 +83,7 @@ module.exports.loggout = async (req, res) => {
         res.json({ message: error });
     }
 }
-//FORGOT PASSWORD
+//Forgot password
 module.exports.forgotPassword = async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
     try {
@@ -111,14 +111,7 @@ module.exports.forgotPassword = async (req, res) => {
         return res.status(500).json({ message: "Ha ocurrido un error al mandar el email. Intentelo mas tarde." }); // IMPORTANTE
     }
 }
-/*
-**IMPORTANTE NOTA**
-Es importante colocar return, debido a que 
-En el codigo, puede haber varios lugares donde se manda la respuesta al cliente  de esta manera (res.json() o res.status().json()), y es posible
-que el código siga ejecutándose después de haber enviado una respuesta.
-Después de enviar una respuesta en el bloque if (!user), hay que agregar un return para salir de la función
-y evitar que el código siguiente también intente enviar una respuesta.
-*/
+//Reset password
 module.exports.resetPassword = async (req, res) => {
     const date = Date.now();
     try {
@@ -150,7 +143,7 @@ module.exports.resetPassword = async (req, res) => {
 //Buscar todos los usuarios
 module.exports.findAllUsers = async (req, res) => {
     try {
-        const user = await User.find().populate("posts");
+        const user = await User.find().populate("Transactions");
         res.status(200);
         res.json(user);
     } catch (error) {
@@ -162,7 +155,7 @@ module.exports.findAllUsers = async (req, res) => {
 module.exports.findUserById = async (req, res) => {
     const { id } = req.params;
     try {
-        const user = await User.findOne({ _id: id }).populate("posts");
+        const user = await User.findOne({ _id: id }).populate("Transactions");
         if (user) {
             res.status(200);
             res.json(user);

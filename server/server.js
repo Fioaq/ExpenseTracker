@@ -21,4 +21,7 @@ app.use('/api/session', sessionRoutes);
 const userRoutes = require("./routes/user.routes");
 app.use('/api/user', userRoutes);
 
+const transactionRoutes = require("./routes/transaction.routes");
+app.use('/api/transaction', transactionRoutes);
+
 app.listen(port, () => console.log(`listen port: ${port}`));
