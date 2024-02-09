@@ -3,9 +3,8 @@ const router = express.Router();
 const UserController = require('../controllers/user.controller');
 const { authenticate } = require('../config/jwt.config');
 
+/* Rutas de session */
 router.post("/login", UserController.login);
-router.post("/forgotPassword", UserController.forgotPassword);
-router.patch("/resetPassword/:token", UserController.resetPassword);
-router.delete("/logout", authenticate, UserController.loggout);
+router.delete("/logout", authenticate, UserController.logout);
 
 module.exports = router;

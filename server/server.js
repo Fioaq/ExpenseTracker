@@ -4,16 +4,23 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const port = 8000;
-app.use(cookieParser());
+
 require("./config/mongoose.config");
+
+app.use(cookieParser());
+
 app.use(
     cors({
         credentials: true,
         origin: [`${process.env.API_URL}`,]
     })
 );
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(express.static('public'));
+
 
 const sessionRoutes = require("./routes/session.routes");
 app.use('/api/session', sessionRoutes);
@@ -23,5 +30,6 @@ app.use('/api/user', userRoutes);
 
 const transactionRoutes = require("./routes/transaction.routes");
 app.use('/api/transaction', transactionRoutes);
+
 
 app.listen(port, () => console.log(`listen port: ${port}`));
