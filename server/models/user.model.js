@@ -72,19 +72,20 @@ UserSchema.pre('save', function (next) {
         });
 });
 
-UserSchema.methods.createResetPasswordToken = function () {
-    const resetToken = crypto.randomBytes(32).toString('hex');//los bytes a utilizar y convierte a string en hexadecimal
-    /* 
-    En este caso se especifica el algoritmo a usar que es el sha256, se especifica que campo queremos encriptar
-    Y el digest nos especifica en que formato queremos encriptar, el formato utilizado es el 'hex' o el hexadesimal    
-    */
-    this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex')
-    this.passwordResetTokenExpire = Date.now() + 10 * 60 * 1000; // tiempo a expirar, 10 minutos
-
-    console.log(resetToken, this.passwordResetToken);
-
-    return resetToken;
-}
+UserSchema.pre(["findOneAndUpdate"], async function (next) {
+    const data = this.getUpdate();
+    if (data.password) {
+        try {
+            const salt = await bcrypt.genSalt(10);
+            const hash = await bcrypt.hash(data.password, salt);
+            data.password = hash;
+            next();
+        } catch (error) {
+            next(error);
+        }
+    }
+    next();
+});
 
 
 const User = new mongoose.model("User", UserSchema);

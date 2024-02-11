@@ -1,8 +1,11 @@
+import TopNav from "@/components/nav/page";
+import { Typography } from "@mui/material";
 
 
 export default function Home() {
   return (
-    <main>
-    </main>
+    <TopNav>
+      <Typography>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</Typography>
+    </TopNav>
   );
 }

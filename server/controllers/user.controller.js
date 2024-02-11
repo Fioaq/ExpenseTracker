@@ -139,7 +139,7 @@ module.exports.passwordResetToken = async (req, res) => {
         const user = await User.findOne({ email: email });
         if (!user) {
             res.status(404);
-            res.json({ error: "User not found" });
+            res.json({ error: "Usuario no encontrado." });
             return;
         }
         /* Buscamos si ese usuario que si existe ya tiene un token */
@@ -160,7 +160,7 @@ module.exports.passwordResetToken = async (req, res) => {
         res.status(500);
         res.json({
             errors: {
-                server: {
+                server: {   
                     message: error
                 }
             }
