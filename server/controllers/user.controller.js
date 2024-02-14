@@ -57,7 +57,7 @@ module.exports.updateUser = async (req, res) => {
         res.json(updatedUser);
     } catch (error) {
         res.status(500);
-        res.json(error);
+        res.json({ message: error });
     }
 };
 module.exports.deleteUser = async (req, res) => {

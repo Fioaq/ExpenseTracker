@@ -37,6 +37,10 @@ const UserSchema = new mongoose.Schema({
             message: "La contraseña debe tener al menos una mayúscula, una minúscula, un número y un caracter especial"
         }
     },
+    categories:{
+        type: Array,
+        default: ["Supermercado", "Transporte", "Vivienda", "Salud", "Educación", "Entretenimiento", "Vestimenta", "Servicios públicos", "Viajes", "Regalos"]
+    },
     transactions: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Transactions"

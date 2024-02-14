@@ -1,6 +1,6 @@
 "use client"
 
-import RegisterForm from "@/components/forms/RegisterForm";
+import RegisterForm from "@/components/forms/login&register/RegisterForm";
 
 const { Fragment } = require("react")
 

@@ -1,6 +1,6 @@
 "use client"
 
-import PasswordResetForm from "@/components/forms/PasswordResetForm";
+import PasswordResetForm from "@/components/forms/login&register/PasswordResetForm";
 
 const { Fragment } = require("react")
 

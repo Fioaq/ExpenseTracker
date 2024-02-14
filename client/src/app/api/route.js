@@ -14,6 +14,18 @@ export function login(data) {
         }
     });
 }
+export function logout() {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await axios.delete(`${process.env.NEXT_PUBLIC_REACT_APP_API_DOMAIN}/session/logout`, { withCredentials: true });
+            const result = await response.data;
+            resolve(result);
+        } catch (error) {
+            console.log(error);
+            reject(error);
+        }
+    });
+}
 
 /* User */
 export function register(data) {

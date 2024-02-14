@@ -215,7 +215,7 @@ const PasswordResetForm = () => {
                             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                                 <Button
                                     color="inherit"
-                                    disabled={activeStep === 0}
+                                    disabled={activeStep === 0 || activeStep === 1}
                                     onClick={handleBack}
                                     sx={{ mr: 1 }}
                                 >

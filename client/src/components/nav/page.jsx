@@ -3,23 +3,30 @@ import { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useRouter } from 'next/navigation';
+import { logout } from '@/app/api/route';
+import { IconButton, ListItemText, styled } from '@mui/material';
+import AssessmentOutlinedIcon from '@mui/icons-material/AssessmentOutlined';
+import CreditCardOutlinedIcon from '@mui/icons-material/CreditCardOutlined';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import OutboxIcon from '@mui/icons-material/Outbox';
+import '@fontsource-variable/sometype-mono';
+import Link from 'next/link';
 
 const drawerWidth = 240;
+const href = ["", "/", "/transactions", "/income", "/expenses"];
 
-function TopNav({ children }) {
+const TopNav = ({ children }) => {
+    const router = useRouter();
     const [mobileOpen, setMobileOpen] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
 
@@ -38,34 +45,51 @@ function TopNav({ children }) {
         }
     };
 
+    const handleLogout = async (event) => {
+        event.preventDefault();
+        try {
+            const result = await logout();
+            console.log(result);
+            router.push("/login");
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     const drawer = (
-        <div>
-            <Toolbar />
-            <Divider />
+        <div style={{ height: "calc(110vh - 64px)", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <List>
-                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                    <ListItem key={text} disablePadding>
+                {['', 'Panel principal', 'Transacciones', 'Ingresos', 'Gastos'].map((text, index) => (
+                    <ListItem key={text} sx={{ mt: 2 }}>
                         <ListItemButton>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                            <ListItemIcon sx={{ color: "#6C584C" }}>
+                                {index == 1 && <AssessmentOutlinedIcon />}
+                                {index == 2 && <CreditCardOutlinedIcon />}
+                                {index == 3 && <InboxIcon />}
+                                {index == 4 && <OutboxIcon />}
                             </ListItemIcon>
-                            <ListItemText primary={text} />
+                            <Link 
+                                href={href[index]}
+                                style={{
+                                textDecoration: 'none',
+                                color: '#414833',
+                                marginLeft: -17
+                            }}>
+                                {text}
+                            </Link>
                         </ListItemButton>
                     </ListItem>
                 ))}
             </List>
-            <Divider />
             <List>
-                {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                    <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
+                <ListItem>
+                    <ListItemButton>
+                        <ListItemIcon sx={{ color: "#6C584C" }}>
+                            <LogoutIcon />
+                        </ListItemIcon>
+                        <ListItemText onClick={handleLogout} sx={{ ml: -3 }}>Cerrar sesión</ListItemText>
+                    </ListItemButton>
+                </ListItem>
             </List>
         </div>
     );
@@ -76,7 +100,8 @@ function TopNav({ children }) {
             <AppBar
                 position='fixed'
                 sx={{
-                    zIndex: (theme) => theme.zIndex.drawer + 1
+                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                    backgroundColor: "#8E9574"
                 }}
             >
                 <Toolbar>
@@ -89,8 +114,8 @@ function TopNav({ children }) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        Responsive drawer
+                    <Typography variant="h5" noWrap component="div" sx={{ fontFamily: "Sometype Mono Variable, monospace", ml: 0 }}>
+                        ExpenseTracker
                     </Typography>
                 </Toolbar>
             </AppBar>
@@ -109,7 +134,7 @@ function TopNav({ children }) {
                     }}
                     sx={{
                         display: { xs: 'block', sm: 'none' },
-                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }
                     }}
                 >
                     {drawer}
@@ -118,7 +143,7 @@ function TopNav({ children }) {
                     variant="permanent"
                     sx={{
                         display: { xs: 'none', sm: 'block' },
-                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }
                     }}
                     open
                 >
@@ -127,7 +152,7 @@ function TopNav({ children }) {
             </Box>
             <Box
                 component="main"
-                sx={{ flexGrow: 1, p: 3, height: "100vh", width: { sm: `calc(100% - ${drawerWidth}px)` }, backgroundColor: "#fff" }}
+                sx={{ flexGrow: 1, p: 3, height: "100vh", width: { sm: `calc(100% - ${drawerWidth}px)` }, backgroundColor: "#F6F6F6" }}
             >
                 <Toolbar />
                 {children}

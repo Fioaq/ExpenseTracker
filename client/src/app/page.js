@@ -5,7 +5,7 @@ import { Typography } from "@mui/material";
 export default function Home() {
   return (
     <TopNav>
-      <Typography>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</Typography>
+      <Typography>Main</Typography>
     </TopNav>
   );
 }
