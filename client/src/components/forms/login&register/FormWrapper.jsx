@@ -36,7 +36,6 @@ const FormWrapper = ({ children }) => {
                     <Box
                         sx={{
                             padding: 5,
-                            mb: 5,
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
