@@ -25,7 +25,7 @@ module.exports.createUser = async (req, res) => {
 //Buscar todos los usuarios
 module.exports.findAllUsers = async (req, res) => {
     try {
-        const user = await User.find().populate("Transactions");
+        const user = await User.find();
         res.status(200);
         res.json(user);
     } catch (error) {
@@ -37,7 +37,7 @@ module.exports.findAllUsers = async (req, res) => {
 module.exports.findUserById = async (req, res) => {
     const { id } = req.params;
     try {
-        const user = await User.findOne({ _id: id }).populate("Transactions");
+        const user = await User.findOne({ _id: id }).populate("transactions");
         if (user) {
             res.status(200);
             res.json(user);
@@ -99,7 +99,7 @@ module.exports.login = async (req, res) => {
             _id: user._id,
             firstName: user.firstName,
             lastName: user.lastName
-        }, secretKey, { expiresIn: "10m" });
+        }, secretKey, { expiresIn: "24h" });
         res.cookie("userToken", newJWT, { httpOnly: true });
         res.status(200);
         res.json(

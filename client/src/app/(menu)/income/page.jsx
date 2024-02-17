@@ -1,9 +1,10 @@
+import TransactionForm from "@/components/forms/TransactionForm";
 import { Fragment } from "react";
 
 const Income= () => {
 return(
     <Fragment>
-        Income
+        <TransactionForm transactionName="ingreso" />
     </Fragment>
 )
 };

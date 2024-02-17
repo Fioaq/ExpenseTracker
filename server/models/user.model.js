@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const crypto = require("crypto");
 
 const UserSchema = new mongoose.Schema({
     firstName: {
@@ -37,13 +36,17 @@ const UserSchema = new mongoose.Schema({
             message: "La contraseña debe tener al menos una mayúscula, una minúscula, un número y un caracter especial"
         }
     },
-    categories:{
+    expensesCat:{
         type: Array,
-        default: ["Supermercado", "Transporte", "Vivienda", "Salud", "Educación", "Entretenimiento", "Vestimenta", "Servicios públicos", "Viajes", "Regalos"]
+        default: ["Supermercado", "Transporte", "Vivienda", "Salud", "Educación", "Entretenimiento", "Vestimenta", "Servicios públicos", "Viajes", "Regalos", "Otros"]
+    },
+    incomeCat:{
+        type: Array,
+        default: ["Sueldo", "Freelance", "Inversiones", "Otros"]
     },
     transactions: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Transactions"
+        ref: "Transaction"
     }],
     passwordChangeAt: Date,
     passwordResetToken: String,

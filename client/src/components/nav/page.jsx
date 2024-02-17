@@ -14,19 +14,23 @@ import Typography from '@mui/material/Typography';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useRouter } from 'next/navigation';
 import { logout } from '@/app/api/route';
-import { IconButton, ListItemText, styled } from '@mui/material';
+import { IconButton, ListItemText } from '@mui/material';
 import AssessmentOutlinedIcon from '@mui/icons-material/AssessmentOutlined';
 import CreditCardOutlinedIcon from '@mui/icons-material/CreditCardOutlined';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import OutboxIcon from '@mui/icons-material/Outbox';
 import '@fontsource-variable/sometype-mono';
+import '@fontsource/roboto';
 import Link from 'next/link';
+import { clearUser } from '@/lib/features/users/userSlice';
+import { useAppDispatch } from '@/lib/hooks';
 
 const drawerWidth = 240;
 const href = ["", "/", "/transactions", "/income", "/expenses"];
 
 const TopNav = ({ children }) => {
     const router = useRouter();
+    const dispatch = useAppDispatch();
     const [mobileOpen, setMobileOpen] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
 
@@ -50,6 +54,7 @@ const TopNav = ({ children }) => {
         try {
             const result = await logout();
             console.log(result);
+            dispatch(clearUser());
             router.push("/login");
         } catch (error) {
             console.log(error);
@@ -72,7 +77,7 @@ const TopNav = ({ children }) => {
                                 href={href[index]}
                                 style={{
                                 textDecoration: 'none',
-                                color: '#414833',
+                                color: '#373D2B',
                                 marginLeft: -17
                             }}>
                                 {text}
@@ -87,7 +92,7 @@ const TopNav = ({ children }) => {
                         <ListItemIcon sx={{ color: "#6C584C" }}>
                             <LogoutIcon />
                         </ListItemIcon>
-                        <ListItemText onClick={handleLogout} sx={{ ml: -3 }}>Cerrar sesión</ListItemText>
+                        <ListItemText onClick={handleLogout} sx={{ ml: -3, color: '#373D2B' }} disableTypography={true}>Cerrar sesión</ListItemText>
                     </ListItemButton>
                 </ListItem>
             </List>

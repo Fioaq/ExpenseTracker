@@ -12,7 +12,7 @@ import styles from './page.module.css'
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { selectUser, setUserState } from '@/lib/userSlice';
+import { selectUser, setUser } from '@/lib/features/users/userSlice';
 
 const LoginForm = () => {
     const user = useAppSelector(selectUser);
@@ -31,7 +31,7 @@ const LoginForm = () => {
         try {
             const result = await login(data);
             console.log(result);
-            dispatch(setUserState(result.usuario));
+            dispatch(setUser(result.usuario));
             console.log(user);
             router.push("/");
         } catch (error) {

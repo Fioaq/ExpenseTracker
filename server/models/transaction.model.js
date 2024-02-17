@@ -21,7 +21,7 @@ const TransactionSchema = new mongoose.Schema({
     transactionType: {
         type: String,
         required: [true, "El tipo de transacción es requerido."],
-        enum: ["Ingreso", "Gasto"]
+        enum: ["ingreso", "gasto"]
     },
     date: {
         type: Date,

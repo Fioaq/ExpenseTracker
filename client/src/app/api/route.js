@@ -73,3 +73,43 @@ export function passwordReset(data) {
         }
     });
 }
+
+export function findUser(id) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_REACT_APP_API_DOMAIN}/user/${id}`, { withCredentials: true });
+            const result = await response.data;
+            resolve(result);
+        } catch (error) {
+            console.log(error);
+            reject(error);
+        }
+    });
+}
+
+/* Transactions */
+export function findTransaction(id) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_REACT_APP_API_DOMAIN}/transaction/${id}`, { withCredentials: true });
+            const result = await response.data;
+            resolve(result);
+        } catch (error) {
+            console.log(error);
+            reject(error);
+        }
+    });
+}
+
+export function newTransaction(data) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_REACT_APP_API_DOMAIN}/transaction/new`, data, { withCredentials: true });
+            const result = await response.data;
+            resolve(result);
+        } catch (error) {
+            console.log(error);
+            reject(error);
+        }
+    });
+}

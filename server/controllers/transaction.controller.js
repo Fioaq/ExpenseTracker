@@ -1,4 +1,5 @@
 const Transaction = require("../models/transaction.model");
+const User = require("../models/user.model");
 
 //Find all transactions
 module.exports.findAllTransactions = async (req, res) => {
@@ -14,7 +15,7 @@ module.exports.findAllTransactions = async (req, res) => {
 //Find transaction
 module.exports.findTransactionById = async (req, res) => {
     try {
-        const transaction = await Transaction.findOne({ _id: req.params.id });
+        const transaction = await Transaction.findOne({ _id: req.params.id }).populate("user");
         if (transaction) {
             res.status(200);
             res.json(transaction);
@@ -31,6 +32,10 @@ module.exports.findTransactionById = async (req, res) => {
 module.exports.createTransaction = async (req, res) => {
     try {
         const newTransaction = await Transaction.create(req.body);
+
+        // Añade la transaccion al usuario en su lista de transacciones
+        const userId = req.body.user;
+        const user = await User.findByIdAndUpdate(userId, { $push: { transactions: newTransaction._id } }, { new: true });
         res.status(201);
         res.json(newTransaction);
 
@@ -54,7 +59,11 @@ module.exports.updateTransaction = async (req, res) => {
 //Delete transaction
 module.exports.deleteTransaction= async (req, res) => {
     try {
-        const deletedTransaction = await Transaction.deleteOne({ _id: req.params.id });
+        const deletedTransaction = await Transaction.deleteOne({ _id: req.body._id });
+        const userId = req.body.user;
+
+        // Actualiza el usuario para quitar el ID de la transacción de su lista de transacciones
+        await User.findByIdAndUpdate(userId, { $pull: { transactions: req.body._id } });
         res.status(200);
         res.json(deletedTransaction);
 

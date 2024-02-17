@@ -13,13 +13,6 @@ import styles from './page.module.css'
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-
-/*  TODO:
-*   -Redirect on Register Ok
-*   -Handle Terms
-*/
-
-
 const RegisterForm = () => {
     const router = useRouter();
     const [errors, setErrors] = useState({});
@@ -34,7 +27,6 @@ const RegisterForm = () => {
             password: formData.get("password"),
             confirmPassword: formData.get("confirmPassword"),
         };
-        console.log(data);
         try {
             const result = await register(data);
             console.log(result);
@@ -42,13 +34,15 @@ const RegisterForm = () => {
         } catch (error) {
             console.log(error);
             const valErrors = error.response.data.errors;
-            setErrors({
-                firstName: valErrors.firstName?.message ? valErrors.firstName.message: "",
-                lastName: valErrors.lastName?.message ? valErrors.lastName.message: "",
-                email: valErrors.email?.message ? valErrors.email.message: "",
-                password: valErrors.password?.message ? valErrors.password.message : "",
-                confirmPassword: valErrors.confirmPassword?.message ? valErrors.confirmPassword.message : ""
-            });
+            if (error.response?.data?.errors) {
+                setErrors({
+                    firstName: valErrors.firstName?.message ? valErrors.firstName.message : "",
+                    lastName: valErrors.lastName?.message ? valErrors.lastName.message : "",
+                    email: valErrors.email?.message ? valErrors.email.message : "",
+                    password: valErrors.password?.message ? valErrors.password.message : "",
+                    confirmPassword: valErrors.confirmPassword?.message ? valErrors.confirmPassword.message : ""
+                });
+            }
         }
     };
 
