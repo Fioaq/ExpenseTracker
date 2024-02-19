@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+
 .container::-webkit-scrollbar{
     width: 7px;
 }
@@ -9,4 +11,10 @@
 
 .container::-webkit-scrollbar-thumb:hover{
     background-color: #6d5a4f60;
+}
+
+.robotoMedium {
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-style: normal;
 }

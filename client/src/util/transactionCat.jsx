@@ -45,3 +45,7 @@ export const expensesCat= () =>{
 export const incomeCat= () =>{
     return(["Sueldo", "Freelance", "Inversiones", "Otros"])
 }
+
+export const allCategories= () =>{
+    return["","Supermercado", "Transporte", "Vivienda", "Salud", "Educación", "Entretenimiento", "Vestimenta", "Servicios públicos", "Viajes", "Regalos", "Sueldo", "Freelance", "Inversiones", "Otros"]
+}
