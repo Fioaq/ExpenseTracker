@@ -113,3 +113,29 @@ export function newTransaction(data) {
         }
     });
 }
+
+export function editTransaction(id, data) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await axios.patch(`${process.env.NEXT_PUBLIC_REACT_APP_API_DOMAIN}/transaction/${id}`, data, { withCredentials: true });
+            const result = await response.data;
+            resolve(result);
+        } catch (error) {
+            console.log(error);
+            reject(error);
+        }
+    });
+}
+
+export function deleteTransaction(id) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await axios.delete(`${process.env.NEXT_PUBLIC_REACT_APP_API_DOMAIN}/transaction/${id}`, { withCredentials: true });
+            const result = await response.data;
+            resolve(result);
+        } catch (error) {
+            console.log(error);
+            reject(error);
+        }
+    });
+}

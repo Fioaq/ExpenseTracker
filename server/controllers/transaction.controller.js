@@ -59,11 +59,21 @@ module.exports.updateTransaction = async (req, res) => {
 //Delete transaction
 module.exports.deleteTransaction= async (req, res) => {
     try {
-        const deletedTransaction = await Transaction.deleteOne({ _id: req.body._id });
-        const userId = req.body.user;
+        const transactionId = req.params.id;
+        
+        // Busca el usuario que tenga la transacción
+        const user = await User.findOneAndUpdate(
+            { transactions: transactionId },
+            { $pull: { transactions: transactionId } }
+        );
 
-        // Actualiza el usuario para quitar el ID de la transacción de su lista de transacciones
-        await User.findByIdAndUpdate(userId, { $pull: { transactions: req.body._id } });
+        if (!user) {
+            res.status(404);
+            return res.json({ error: "User not found for transaction" });
+        }
+        
+        const deletedTransaction = await Transaction.deleteOne({ _id: req.params.id });
+        
         res.status(200);
         res.json(deletedTransaction);
 

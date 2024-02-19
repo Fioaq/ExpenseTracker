@@ -1,10 +1,10 @@
-import TransactionForm from "@/components/forms/TransactionForm";
+import ExpIncMain from "@/components/expenses&income/page";
 import { Fragment } from "react";
 
 const Income= () => {
 return(
     <Fragment>
-        <TransactionForm transactionName="ingreso" />
+        <ExpIncMain transactionType="ingreso" />
     </Fragment>
 )
 };

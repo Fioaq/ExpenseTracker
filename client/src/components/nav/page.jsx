@@ -62,11 +62,11 @@ const TopNav = ({ children }) => {
     };
 
     const drawer = (
-        <div style={{ height: "calc(110vh - 64px)", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+        <div style={{ height: "calc(110vh - 64px)", display: "flex", flexDirection: "column", justifyContent: "space-between", backgroundColor: "#F7F6F4" }}>
             <List>
                 {['', 'Panel principal', 'Transacciones', 'Ingresos', 'Gastos'].map((text, index) => (
                     <ListItem key={text} sx={{ mt: 2 }}>
-                        <ListItemButton>
+                        <ListItemButton sx={{"&:hover": { backgroundColor: "#a4ac861c" }}}>
                             <ListItemIcon sx={{ color: "#6C584C" }}>
                                 {index == 1 && <AssessmentOutlinedIcon />}
                                 {index == 2 && <CreditCardOutlinedIcon />}
@@ -157,7 +157,7 @@ const TopNav = ({ children }) => {
             </Box>
             <Box
                 component="main"
-                sx={{ flexGrow: 1, p: 3, height: "100vh", width: { sm: `calc(100% - ${drawerWidth}px)` }, backgroundColor: "#F6F6F6" }}
+                sx={{ flexGrow: 1, p: 3, height: "100vh", width: { sm: `calc(100% - ${drawerWidth}px)` }, backgroundColor: "#EAE8E3" }}
             >
                 <Toolbar />
                 {children}
