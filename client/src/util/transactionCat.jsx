@@ -67,5 +67,5 @@ export const incomeCat= () =>{
 }
 
 export const allCategories= () =>{
-    return["","Supermercado", "Transporte", "Vivienda", "Salud", "Educación", "Entretenimiento", "Vestimenta", "Servicios públicos", "Viajes", "Regalos", "Sueldo", "Freelance", "Inversiones", "Otros"]
+    return["Supermercado", "Transporte", "Vivienda", "Salud", "Educación", "Entretenimiento", "Vestimenta", "Servicios públicos", "Viajes", "Regalos", "Sueldo", "Freelance", "Inversiones", "Otros"]
 }

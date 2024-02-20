@@ -94,7 +94,7 @@ const TransactionList = () => {
             className={style.container}
             sx={{
                 height: "calc(100% - 80px)",
-                backgroundColor: "#fff",
+                backgroundColor: "#F7F6F4",
                 border: "1px solid #E0E0E0",
                 borderRadius: 3,
                 px: 4,
@@ -103,7 +103,7 @@ const TransactionList = () => {
                 overflow: "auto"
             }}>
             <Grid container spacing={2}>
-            <Grid item xs={12} md={12}>
+                <Grid item xs={12} md={12}>
                     <Box
                         sx={{
                             backgroundColor: "#a4ac863f",
@@ -115,7 +115,7 @@ const TransactionList = () => {
                             alignItems: "center",
                             height: "7vh"
                         }}>
-                        <Typography variant="h4" className={style.robotoMedium} sx={{fontSize: "1.7rem", color: "#5C4C41", fontWeight:400, letterSpacing:0.3 }}>
+                        <Typography variant="h4" className={style.robotoMedium} sx={{ fontSize: "1.7rem", color: "#5C4C41", fontWeight: 400, letterSpacing: 0.3 }}>
                             Todas las transacciones
                         </Typography>
                     </Box>
@@ -187,16 +187,15 @@ const TransactionList = () => {
                     />
                 </Grid>
                 <Grid item xs={12} md={12}>
-                    <List sx={{mt: -2}}>
+                    <List sx={{ mt: -2 }}>
                         {/*Convierte el objeto groupedTransactions en un array de pares clave-valor, donde cada par es un array con dos elementos: 
                         la clave (que en este caso sería la fecha formateada) y el valor (que sería un array de transacciones correspondientes a esa fecha)*/}
                         {Object.entries(groupedTransactions).map(([date, transactions]) => (
                             <Fragment key={date}>
                                 <Typography variant="h6" sx={{ my: 1, color: "#5C4C41" }}>{date}</Typography>
                                 {transactions.map((transaction, idx) => (
-                                    <Fragment>
+                                    <Fragment key={idx}>
                                         <ListItem
-                                            key={idx}
                                             sx={{ my: 1, "&:hover": { backgroundColor: "#a4ac861c" } }}
                                             secondaryAction={
                                                 <Box sx={{ display: "flex", alignItems: "center", color: `${transaction.transactionType == "ingreso" ? "#727B54" : "#AC4F4F"}` }}>

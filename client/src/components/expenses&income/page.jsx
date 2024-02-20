@@ -3,7 +3,7 @@ import { deleteTransaction, findUser } from "@/app/api/route";
 import { selectUser } from "@/lib/features/users/userSlice";
 import { useAppSelector } from "@/lib/hooks";
 import { allCategories, getCategoryColor, iconCategories } from "@/util/transactionCat";
-import { Box, Button, Divider, Grid, IconButton, ListItem, ListItemAvatar, MenuItem, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid, IconButton, ListItem, ListItemAvatar, MenuItem, TextField, Typography } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
