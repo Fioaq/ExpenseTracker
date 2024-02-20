@@ -58,7 +58,6 @@ const EditTransactionForm = ({ transaction, onClose, open, completed }) => {
         }
         try {
             const result = await editTransaction(transaction._id, data);
-            console.log(result);
             completed();
             Swal.fire({
                 toast: true,

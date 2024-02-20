@@ -56,7 +56,6 @@ const ExpIncMain = ({ transactionType }) => {
                 return dayjs(b.date) - dayjs(a.date);
             });
             setTransactions(sortedTransactions);
-            console.log(sortedTransactions);
         } catch (error) {
             console.log(error);
         }
@@ -94,7 +93,6 @@ const ExpIncMain = ({ transactionType }) => {
     const handleDelete = async (id) => {
         try {
             const result = await deleteTransaction(id);
-            console.log(result);
             Swal.fire({
                 toast: true,
                 icon: "success",

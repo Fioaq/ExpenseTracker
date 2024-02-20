@@ -30,9 +30,7 @@ const LoginForm = () => {
         }
         try {
             const result = await login(data);
-            console.log(result);
             dispatch(setUser(result.usuario));
-            console.log(user);
             router.push("/");
         } catch (error) {
             console.log(error);

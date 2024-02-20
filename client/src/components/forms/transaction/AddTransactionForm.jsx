@@ -60,7 +60,6 @@ const AddTransactionForm = ({ transactionName, onClose, open, completed }) => {
         }
         try {
             const result = await newTransaction(data);
-            console.log(result);
             completed();
             Swal.fire({
                 toast: true,

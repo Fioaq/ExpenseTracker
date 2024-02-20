@@ -53,7 +53,6 @@ const TopNav = ({ children }) => {
         event.preventDefault();
         try {
             const result = await logout();
-            console.log(result);
             dispatch(clearUser());
             router.push("/login");
         } catch (error) {
@@ -62,27 +61,25 @@ const TopNav = ({ children }) => {
     };
 
     const drawer = (
-        <div style={{ height: "calc(110vh - 64px)", display: "flex", flexDirection: "column", justifyContent: "space-between", backgroundColor: "#F7F6F4" }}>
+        <div style={{ height: "calc(110vh - 64px)", display: "flex", flexDirection: "column", justifyContent: "space-between", backgroundColor: "#F7F6F4", overflow:"hidden" }}>
             <List>
                 {['', 'Panel principal', 'Transacciones', 'Ingresos', 'Gastos'].map((text, index) => (
-                    <ListItem key={text} sx={{ mt: 2 }}>
-                        <ListItemButton sx={{"&:hover": { backgroundColor: "#a4ac861c" }}}>
-                            <ListItemIcon sx={{ color: "#6C584C" }}>
-                                {index == 1 && <AssessmentOutlinedIcon />}
-                                {index == 2 && <CreditCardOutlinedIcon />}
-                                {index == 3 && <InboxIcon />}
-                                {index == 4 && <OutboxIcon />}
-                            </ListItemIcon>
-                            <Link 
-                                href={href[index]}
-                                style={{
+                    <ListItem key={text} sx={{ mt: 2, p:2, ml:2, "&:hover": { backgroundColor: "#a4ac861c" } }}>
+                        <ListItemIcon sx={{ color: "#6C584C" }}>
+                            {index == 1 && <AssessmentOutlinedIcon />}
+                            {index == 2 && <CreditCardOutlinedIcon />}
+                            {index == 3 && <InboxIcon />}
+                            {index == 4 && <OutboxIcon />}
+                        </ListItemIcon>
+                        <Link
+                            href={href[index]}
+                            style={{
                                 textDecoration: 'none',
                                 color: '#373D2B',
                                 marginLeft: -17
                             }}>
-                                {text}
-                            </Link>
-                        </ListItemButton>
+                            {text}
+                        </Link>
                     </ListItem>
                 ))}
             </List>

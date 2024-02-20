@@ -29,7 +29,6 @@ const RegisterForm = () => {
         };
         try {
             const result = await register(data);
-            console.log(result);
             router.push("/login");
         } catch (error) {
             console.log(error);

@@ -45,7 +45,6 @@ const PasswordResetForm = () => {
         if (activeStep === 0) {
             try {
                 const getToken = await passwordResetToken({ email: email });
-                console.log(getToken);
                 setActiveStep((prevActiveStep) => prevActiveStep + 1);
             } catch (error) {
                 console.log(error);
@@ -66,7 +65,6 @@ const PasswordResetForm = () => {
                     token: token
                 }
                 const updatePassword = await passwordReset(data);
-                console.log(updatePassword);
                 setActiveStep((prevActiveStep) => prevActiveStep + 1);
                 setTimeout(() => {
                     router.push("/login")

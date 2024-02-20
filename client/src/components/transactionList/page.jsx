@@ -37,7 +37,6 @@ const TransactionList = () => {
             const result = await findUser(user._id);
             setTransactions(result.transactions);
             setFilteredTransactions(result.transactions);
-            console.log(result.transactions);
         } catch (error) {
             console.log(error);
         }
