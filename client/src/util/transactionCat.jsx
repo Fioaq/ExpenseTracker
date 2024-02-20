@@ -15,8 +15,6 @@ import TrendingUpOutlinedIcon from '@mui/icons-material/TrendingUpOutlined';
 import PendingOutlinedIcon from '@mui/icons-material/PendingOutlined';
 import { Avatar } from '@mui/material';
 
-
-
 export const iconCategories = (category) => {
     const icons = {
         "Supermercado": <Avatar sx={{ bgcolor: "#F1B4BD", color: "#fff" }} ><LocalGroceryStoreOutlinedIcon /></Avatar>,
@@ -37,6 +35,28 @@ export const iconCategories = (category) => {
 
     return icons[category] || <Fragment />;
 };
+
+export const getCategoryColor = (category) => {
+    const colors = {
+        "Supermercado": "#F1B4BD",
+        "Transporte": "#9FC4D0",
+        "Vivienda": "#DBCC78",
+        "Salud": "#87BB87",
+        "Educación": "#E79778",
+        "Entretenimiento": "#7FB4D5",
+        "Vestimenta": "#C66B99",
+        "Servicios públicos": "#D26C5A",
+        "Viajes": "#55A09C",
+        "Regalos": "#8D76BB",
+        "Sueldo": "#E3B053",
+        "Freelance": "#5A8E6A",
+        "Inversiones": "#CD5C5C",
+        "Otros": "#A7B2C1",
+    };
+
+    return colors[category] || "#F6F6F6";
+};
+
 
 export const expensesCat= () =>{
     return(["Supermercado", "Transporte", "Vivienda", "Salud", "Educación", "Entretenimiento", "Vestimenta", "Servicios públicos", "Viajes", "Regalos", "Otros"])

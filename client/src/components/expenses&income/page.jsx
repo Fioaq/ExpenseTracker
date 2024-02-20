@@ -2,8 +2,8 @@
 import { deleteTransaction, findUser } from "@/app/api/route";
 import { selectUser } from "@/lib/features/users/userSlice";
 import { useAppSelector } from "@/lib/hooks";
-import { allCategories, iconCategories } from "@/util/transactionCat";
-import { Box, Button, Grid, IconButton, ListItem, ListItemAvatar, MenuItem, TextField, Typography } from "@mui/material";
+import { allCategories, getCategoryColor, iconCategories } from "@/util/transactionCat";
+import { Box, Button, Divider, Grid, IconButton, ListItem, ListItemAvatar, MenuItem, TextField, Typography } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
@@ -16,8 +16,11 @@ import dayjs from "dayjs";
 import AddTransactionForm from "@/components/forms/transaction/AddTransactionForm";
 import EditTransactionForm from "../forms/transaction/editTransactionForm";
 import { DatePicker } from "@mui/x-date-pickers";
+import { PieChart } from "@mui/x-charts";
 
 const categories = allCategories();
+const startOfMonth = dayjs().startOf('month');
+const endOfMonth = dayjs().endOf('month');
 
 const ExpIncMain = ({ transactionType }) => {
     const user = useAppSelector(selectUser);
@@ -29,6 +32,8 @@ const ExpIncMain = ({ transactionType }) => {
     const [categorySearch, setCategorySearch] = useState("");
     const [dateSearch, setDateSearch] = useState(null);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
+    const [startDate, setStartDate] = useState(startOfMonth);
+    const [endDate, setEndDate] = useState(endOfMonth);
 
 
     useEffect(() => {
@@ -63,7 +68,6 @@ const ExpIncMain = ({ transactionType }) => {
         setFilteredTransactions(filtered);
     };
 
-
     const handleColor = () => {
         return transactionType == "ingreso" ? "#727B54" : "#AC4F4F"
     };
@@ -89,6 +93,37 @@ const ExpIncMain = ({ transactionType }) => {
             console.log(error);
         }
     }
+
+    const getCategoryCounts = (transactions) => {
+        const categoryCounts = {};
+        transactions.forEach((transaction) => {
+            const category = transaction.category;
+            categoryCounts[category] = (categoryCounts[category] || 0) + 1;
+        });
+        return categoryCounts;
+    };
+
+    const prepareChartData = (transactions) => {
+        let newFilteredTransactions = transactions;
+    
+        if (startDate && endDate) {
+            newFilteredTransactions = transactions.filter((transaction) =>
+                dayjs(transaction.date).isAfter(startDate) &&
+                dayjs(transaction.date).isBefore(endDate)
+            );
+        }
+    
+        const categoryCounts = getCategoryCounts(newFilteredTransactions);
+        const chartData = Object.keys(categoryCounts).map((category, index) => ({
+            id: index,
+            label: category,
+            value: categoryCounts[category],
+            color: `${getCategoryColor(category)}`
+        }));
+        return chartData;
+    };
+    
+
 
     const handleCompleted = () => {
         getTransactions();
@@ -145,7 +180,42 @@ const ExpIncMain = ({ transactionType }) => {
                             overflow: "auto"
                         }}>
                         <Grid container spacing={2}>
-                            <Grid item xs={12} md={4}>
+                            <Grid item xs={12} md={3}>
+                                <Button
+                                    variant="outlined"
+                                    endIcon={<AddIcon />}
+                                    fullWidth
+                                    onClick={handleClickOpenNew}
+                                    sx={{
+                                        "& .MuiButton-endIcon": {
+                                            margin: "0px",
+                                            ml: 0.4, mb: 0.3, p:0.3
+                                        },
+                                        color: "#6C584C",
+                                        borderColor: "#A4AC86",
+                                        fontWeight: "bold",
+                                        backgroundColor: "#a4ac863f",
+                                        "&: hover": {
+                                            backgroundColor: "#a4ac8665",
+                                            borderColor: "#A4AC86"
+                                        }
+                                    }}>
+                                    Añadir {transactionType}
+                                </Button>
+                                <AddTransactionForm
+                                    transactionName={transactionType}
+                                    open={open}
+                                    onClose={handleClose}
+                                    completed={handleCompleted}
+                                />
+                                <EditTransactionForm
+                                    transaction={transaction}
+                                    open={openEdit}
+                                    onClose={handleClose}
+                                    completed={handleCompleted}
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={3}>
                                 <TextField
                                     placeholder="Buscar"
                                     variant="outlined"
@@ -169,7 +239,7 @@ const ExpIncMain = ({ transactionType }) => {
                                     onChange={(e) => setTitleSearch(e.target.value)}
                                 />
                             </Grid>
-                            <Grid item xs={12} md={4}>
+                            <Grid item xs={12} md={3}>
                                 <TextField
                                     select
                                     fullWidth
@@ -194,12 +264,12 @@ const ExpIncMain = ({ transactionType }) => {
                                     ))}
                                 </TextField>
                             </Grid>
-                            <Grid item xs={12} md={4}>
+                            <Grid item xs={12} md={3}>
                                 <DatePicker
                                     label="Fecha"
                                     inputVariant="outlined"
                                     value={dateSearch}
-                                    slotProps={{ textField: { size: 'small', color:"success" } }}
+                                    slotProps={{ textField: { size: 'small', color: "success" } }}
                                     sx={{
                                         borderColor: "#A4AC86",
                                         "& .MuiOutlinedInput-notchedOutline": {
@@ -250,7 +320,6 @@ const ExpIncMain = ({ transactionType }) => {
                                         </Box>
                                     </Box>
                                 </ListItem>
-
                             )
                         })}
                     </Box>
@@ -261,41 +330,52 @@ const ExpIncMain = ({ transactionType }) => {
                             backgroundColor: "#F7F6F4",
                             border: "1px solid #E0E0E0",
                             borderRadius: 3,
-                            p: 2
+                            pt: 4
                         }}>
-                        <Typography variant="h4">GRAPHIC</Typography>
-                        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                            <Button
-                                variant="outlined"
-                                endIcon={<AddIcon />}
-                                onClick={handleClickOpenNew}
-                                sx={{
-                                    "& .MuiButton-endIcon": {
-                                        margin: "0px",
-                                        ml: 0.4, mb: 0.3
+                        <Box sx={{ mb: 10 }}>
+                            <PieChart
+                                series={[{ data: prepareChartData(transactions) }]}
+                                width={660}
+                                height={300}
+                                slotProps={{
+                                    legend: {
+                                        direction: 'column',
+                                        position: { vertical: 'middle', horizontal: 'right' },
+                                        padding: 0,
                                     },
-                                    color: "#6C584C",
-                                    borderColor: "#A4AC86",
-                                    fontWeight: "bold",
-                                    backgroundColor: "#a4ac863f",
-                                    "&: hover": {
-                                        backgroundColor: "#a4ac8665",
-                                        borderColor: "#A4AC86"
-                                    }
-                                }}>
-                                Agregar {transactionType}
-                            </Button>
-                            <AddTransactionForm
-                                transactionName={transactionType}
-                                open={open}
-                                onClose={handleClose}
-                                completed={handleCompleted}
+                                }}
                             />
-                            <EditTransactionForm
-                                transaction={transaction}
-                                open={openEdit}
-                                onClose={handleClose}
-                                completed={handleCompleted}
+                        </Box>
+                        <Box sx={{ px: 5, pb: 5, display: "flex", justifyContent: "center", gap: 3 }}>
+                            <DatePicker
+                                label="Fecha Inicio"
+                                inputVariant="outlined"
+                                value={startDate}
+                                slotProps={{ textField: { size: 'small', color: "success" } }}
+                                sx={{
+                                    borderColor: "#A4AC86",
+                                    "& .MuiOutlinedInput-notchedOutline": {
+                                        borderColor: "#A4AC86",
+                                        backgroundColor: '#a4ac863f'
+                                    },
+                                }}
+                                onChange={(date) => setStartDate(date)}
+                                format="YYYY/MM/DD"
+                            />
+                            <DatePicker
+                                label="Fecha Fin"
+                                inputVariant="outlined"
+                                value={endDate}
+                                slotProps={{ textField: { size: 'small', color: "success" } }}
+                                sx={{
+                                    borderColor: "#A4AC86",
+                                    "& .MuiOutlinedInput-notchedOutline": {
+                                        borderColor: "#A4AC86",
+                                        backgroundColor: '#a4ac863f'
+                                    },
+                                }}
+                                onChange={(date) => setEndDate(date)}
+                                format="YYYY/MM/DD"
                             />
                         </Box>
                     </Box>
