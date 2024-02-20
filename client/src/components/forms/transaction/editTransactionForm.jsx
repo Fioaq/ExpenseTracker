@@ -11,6 +11,7 @@ import { Dialog, DialogTitle, MenuItem } from '@mui/material';
 import { useAppSelector } from '@/lib/hooks';
 import { selectUser } from '@/lib/features/users/userSlice';
 import { expensesCat, incomeCat } from '@/util/transactionCat';
+import Swal from 'sweetalert2';
 
 const sty = {
     '& label.Mui-focused': {
@@ -59,6 +60,19 @@ const EditTransactionForm = ({ transaction, onClose, open, completed }) => {
             const result = await editTransaction(transaction._id, data);
             console.log(result);
             completed();
+            Swal.fire({
+                toast: true,
+                icon: "success",
+                iconColor: "white",
+                position: "bottom",
+                color: "white",
+                title: `${transaction.transactionType=="ingreso" ? "Ingreso" : "Gasto"} editado correctamente.`,
+                background: "#a5dc86",
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+            });
+            onClose();
         } catch (error) {
             console.log(error);
             const valErrors = error.response.data.error.errors;

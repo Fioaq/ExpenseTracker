@@ -12,6 +12,7 @@ import { Dialog, DialogTitle, MenuItem } from '@mui/material';
 import { useAppSelector } from '@/lib/hooks';
 import { selectUser } from '@/lib/features/users/userSlice';
 import { expensesCat, incomeCat } from '@/util/transactionCat';
+import Swal from 'sweetalert2';
 
 const sty = {
     '& label.Mui-focused': {
@@ -61,6 +62,19 @@ const AddTransactionForm = ({ transactionName, onClose, open, completed }) => {
             const result = await newTransaction(data);
             console.log(result);
             completed();
+            Swal.fire({
+                toast: true,
+                icon: "success",
+                iconColor: "#EAE8E3",
+                position: "bottom",
+                color: "#EAE8E3",
+                title: `${transactionName=="ingreso" ? "Ingreso" : "Gasto"} agregado correctamente.`,
+                background: "#87AA73",
+                showConfirmButton: false,
+                timer: 2500,
+                timerProgressBar: true,
+            });
+            onClose();
         } catch (error) {
             console.log(error);
             const valErrors = error.response.data.error.errors;

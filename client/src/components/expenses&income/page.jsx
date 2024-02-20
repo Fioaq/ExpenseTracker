@@ -2,7 +2,7 @@
 import { deleteTransaction, findUser } from "@/app/api/route";
 import { selectUser } from "@/lib/features/users/userSlice";
 import { useAppSelector } from "@/lib/hooks";
-import { allCategories, getCategoryColor, iconCategories } from "@/util/transactionCat";
+import { allCategories, expensesCat, getCategoryColor, iconCategories, incomeCat } from "@/util/transactionCat";
 import { Box, Button, Grid, IconButton, ListItem, ListItemAvatar, MenuItem, TextField, Typography } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -17,8 +17,10 @@ import AddTransactionForm from "@/components/forms/transaction/AddTransactionFor
 import EditTransactionForm from "../forms/transaction/editTransactionForm";
 import { DatePicker } from "@mui/x-date-pickers";
 import { PieChart } from "@mui/x-charts";
+import Swal from "sweetalert2";
 
-const categories = allCategories();
+const expCategories = expensesCat();
+const incCategories = incomeCat();
 const startOfMonth = dayjs().startOf('month');
 const endOfMonth = dayjs().endOf('month');
 
@@ -34,6 +36,7 @@ const ExpIncMain = ({ transactionType }) => {
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const [startDate, setStartDate] = useState(startOfMonth);
     const [endDate, setEndDate] = useState(endOfMonth);
+    const categories = transactionType == "ingreso" ? incCategories : expCategories;
 
 
     useEffect(() => {
@@ -62,11 +65,12 @@ const ExpIncMain = ({ transactionType }) => {
     const filterTransactions = () => {
         const filtered = transactions.filter((transaction) =>
             transaction.title.toLowerCase().includes(titleSearch.toLowerCase()) &&
-            transaction.category.toLowerCase().includes(categorySearch.toLowerCase()) &&
+            (categorySearch === "Todas las categorías" || transaction.category.toLowerCase().includes(categorySearch.toLowerCase())) &&
             (dateSearch ? dayjs(transaction.date).isSame(dateSearch, 'day') : true)
         );
         setFilteredTransactions(filtered);
     };
+
 
     const handleColor = () => {
         return transactionType == "ingreso" ? "#727B54" : "#AC4F4F"
@@ -78,7 +82,10 @@ const ExpIncMain = ({ transactionType }) => {
 
     const handleTotal = () => {
         let total = 0;
-        transactions.forEach((transaction) => {
+        const currentMonthTransactions = transactions.filter((transaction) =>
+            dayjs(transaction.date).isSame(dayjs(), 'month')
+        );
+        currentMonthTransactions.forEach((transaction) => {
             total += transaction.amount;
         });
         return formatoConPuntos(total);
@@ -88,6 +95,18 @@ const ExpIncMain = ({ transactionType }) => {
         try {
             const result = await deleteTransaction(id);
             console.log(result);
+            Swal.fire({
+                toast: true,
+                icon: "success",
+                iconColor: "#EAE8E3",
+                position: "bottom",
+                color: "#EAE8E3",
+                title: `${transactionType == "ingreso" ? "Ingreso" : "Gasto"} eliminado correctamente.`,
+                background: "#87AA73",
+                showConfirmButton: false,
+                timer: 2500,
+                timerProgressBar: true,
+            });
             getTransactions();
         } catch (error) {
             console.log(error);
@@ -105,14 +124,14 @@ const ExpIncMain = ({ transactionType }) => {
 
     const prepareChartData = (transactions) => {
         let newFilteredTransactions = transactions;
-    
+
         if (startDate && endDate) {
             newFilteredTransactions = transactions.filter((transaction) =>
                 dayjs(transaction.date).isAfter(startDate) &&
                 dayjs(transaction.date).isBefore(endDate)
             );
         }
-    
+
         const categoryCounts = getCategoryCounts(newFilteredTransactions);
         const chartData = Object.keys(categoryCounts).map((category, index) => ({
             id: index,
@@ -122,7 +141,7 @@ const ExpIncMain = ({ transactionType }) => {
         }));
         return chartData;
     };
-    
+
 
 
     const handleCompleted = () => {
@@ -189,7 +208,7 @@ const ExpIncMain = ({ transactionType }) => {
                                     sx={{
                                         "& .MuiButton-endIcon": {
                                             margin: "0px",
-                                            ml: 0.4, mb: 0.3, p:0.3
+                                            ml: 0.4, mb: 0.3, p: 0.3
                                         },
                                         color: "#6C584C",
                                         borderColor: "#A4AC86",

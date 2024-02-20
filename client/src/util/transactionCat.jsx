@@ -27,7 +27,7 @@ export const iconCategories = (category) => {
         "Servicios públicos": <Avatar sx={{ bgcolor: "#D26C5A", color: "#fff" }} ><FeedOutlinedIcon /></Avatar>,
         "Viajes": <Avatar sx={{ bgcolor: "#55A09C", color: "#fff" }} ><PublicOutlinedIcon /></Avatar>,
         "Regalos": <Avatar sx={{ bgcolor: "#8D76BB", color: "#fff" }} ><CardGiftcardIcon /></Avatar>,
-        "Sueldo": <Avatar sx={{ bgcolor: "#E3B053", color: "#fff" }} ><CardTravelIcon /></Avatar>,
+        "Salario": <Avatar sx={{ bgcolor: "#E3B053", color: "#fff" }} ><CardTravelIcon /></Avatar>,
         "Freelance": <Avatar sx={{ bgcolor: "#5A8E6A", color: "#fff" }} ><PaymentsOutlinedIcon /></Avatar>,
         "Inversiones": <Avatar sx={{ bgcolor: "#CD5C5C", color: "#fff" }} ><TrendingUpOutlinedIcon /></Avatar>,
         "Otros": <Avatar sx={{ bgcolor: "#A7B2C1", color: "#fff" }} ><PendingOutlinedIcon /></Avatar>,
@@ -48,7 +48,7 @@ export const getCategoryColor = (category) => {
         "Servicios públicos": "#D26C5A",
         "Viajes": "#55A09C",
         "Regalos": "#8D76BB",
-        "Sueldo": "#E3B053",
+        "Salario": "#E3B053",
         "Freelance": "#5A8E6A",
         "Inversiones": "#CD5C5C",
         "Otros": "#A7B2C1",
@@ -63,7 +63,7 @@ export const expensesCat= () =>{
 }
 
 export const incomeCat= () =>{
-    return(["Sueldo", "Freelance", "Inversiones", "Otros"])
+    return(["Salario", "Freelance", "Inversiones", "Otros"])
 }
 
 export const allCategories= () =>{

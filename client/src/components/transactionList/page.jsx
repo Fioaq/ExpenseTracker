@@ -46,11 +46,12 @@ const TransactionList = () => {
     const filterTransactions = () => {
         const filtered = transactions.filter((transaction) =>
             transaction.title.toLowerCase().includes(titleSearch.toLowerCase()) &&
-            transaction.category.toLowerCase().includes(categorySearch.toLowerCase()) &&
+            (categorySearch === "Todas las categorías" || transaction.category.toLowerCase().includes(categorySearch.toLowerCase())) &&
             (dateSearch ? dayjs(transaction.date).isSame(dateSearch, 'day') : true)
         );
         setFilteredTransactions(filtered);
     };
+
 
     const formatoConPuntos = (num) => {
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -58,7 +59,7 @@ const TransactionList = () => {
 
     // Función para formatear la fecha
     const formatDate = (date) => {
-        const today = dayjs().subtract(1, 'day');
+        const today = dayjs();
         const transactionDate = dayjs(date);
 
         // Comprueba si la fecha es hoy
@@ -87,7 +88,6 @@ const TransactionList = () => {
 
         return acc;
     }, {});
-
 
     return (
         <Box
@@ -190,45 +190,56 @@ const TransactionList = () => {
                     <List sx={{ mt: -2 }}>
                         {/*Convierte el objeto groupedTransactions en un array de pares clave-valor, donde cada par es un array con dos elementos: 
                         la clave (que en este caso sería la fecha formateada) y el valor (que sería un array de transacciones correspondientes a esa fecha)*/}
-                        {Object.entries(groupedTransactions).map(([date, transactions]) => (
-                            <Fragment key={date}>
-                                <Typography variant="h6" sx={{ my: 1, color: "#5C4C41" }}>{date}</Typography>
-                                {transactions.map((transaction, idx) => (
-                                    <Fragment key={idx}>
-                                        <ListItem
-                                            sx={{ my: 1, "&:hover": { backgroundColor: "#a4ac861c" } }}
-                                            secondaryAction={
-                                                <Box sx={{ display: "flex", alignItems: "center", color: `${transaction.transactionType == "ingreso" ? "#727B54" : "#AC4F4F"}` }}>
-                                                    <Typography fontSize={"1.1rem"}>
-                                                        {transaction.transactionType == "ingreso" ? "+" : "-"}
+                        {Object.entries(groupedTransactions)
+                            .sort(([dateA], [dateB]) => {
+                                // Convierte las fechas a objetos dayjs
+                                const dateObjA = dateA === "Hoy" ? dayjs() : dateA === "Ayer" ? dayjs().subtract(1, 'day') : dayjs(dateA, 'DD/MM/YYYY');
+                                const dateObjB = dateB === "Hoy" ? dayjs() : dateB === "Ayer" ? dayjs().subtract(1, 'day') : dayjs(dateB, 'DD/MM/YYYY');
+                        
+                                if (dateObjA.isSame(dateObjB, 'day')) return 0; // Si las fechas son iguales, no hay cambio en el orden
+                        
+                                // Ordena las fechas en orden descendente
+                                return dateObjA.isAfter(dateObjB) ? -1 : 1;
+                            })
+                            .map(([date, transactions]) => (
+                                <Fragment key={date}>
+                                    <Typography variant="h6" sx={{ my: 1, color: "#5C4C41" }}>{date}</Typography>
+                                    {transactions.map((transaction, idx) => (
+                                        <Fragment key={idx}>
+                                            <ListItem
+                                                sx={{ my: 1, "&:hover": { backgroundColor: "#a4ac861c" } }}
+                                                secondaryAction={
+                                                    <Box sx={{ display: "flex", alignItems: "center", color: `${transaction.transactionType == "ingreso" ? "#727B54" : "#AC4F4F"}` }}>
+                                                        <Typography fontSize={"1.1rem"}>
+                                                            {transaction.transactionType == "ingreso" ? "+" : "-"}
+                                                        </Typography>
+                                                        <AttachMoneyIcon fontSize="small" />
+                                                        <Typography sx={{ ml: -0.5, fontSize: "1.1rem" }}>
+                                                            {formatoConPuntos(transaction.amount)}
+                                                        </Typography>
+                                                    </Box>
+                                                }
+                                            >
+                                                <ListItemAvatar>
+                                                    {iconCategories(transaction.category)}
+                                                </ListItemAvatar>
+                                                <Box sx={{ display: "flex", flexDirection: "column", color: "#53443B" }}>
+                                                    <Typography variant="subtitle1" className={style.robotoMedium} sx={{ fontSize: "1.05rem", color: `${transaction.transactionType == "ingreso" ? "#727B54" : "#AC4F4F"}` }}>
+                                                        {transaction.title}
                                                     </Typography>
-                                                    <AttachMoneyIcon fontSize="small" />
-                                                    <Typography sx={{ ml: -0.5, fontSize: "1.1rem" }}>
-                                                        {formatoConPuntos(transaction.amount)}
-                                                    </Typography>
+                                                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                                                        <MessageIcon fontSize="small" sx={{ color: "#656D4A" }} />
+                                                        <Typography sx={{ ml: 1 }}>
+                                                            {transaction.description == "" ? "..." : transaction.description}
+                                                        </Typography>
+                                                    </Box>
                                                 </Box>
-                                            }
-                                        >
-                                            <ListItemAvatar>
-                                                {iconCategories(transaction.category)}
-                                            </ListItemAvatar>
-                                            <Box sx={{ display: "flex", flexDirection: "column", color: "#53443B" }}>
-                                                <Typography variant="subtitle1" className={style.robotoMedium} sx={{ fontSize: "1.05rem", color: `${transaction.transactionType == "ingreso" ? "#727B54" : "#AC4F4F"}` }}>
-                                                    {transaction.title}
-                                                </Typography>
-                                                <Box sx={{ display: "flex", alignItems: "center" }}>
-                                                    <MessageIcon fontSize="small" sx={{ color: "#656D4A" }} />
-                                                    <Typography sx={{ ml: 1 }}>
-                                                        {transaction.description == "" ? "..." : transaction.description}
-                                                    </Typography>
-                                                </Box>
-                                            </Box>
-                                        </ListItem>
-                                        <Divider variant="middle" />
-                                    </Fragment>
-                                ))}
-                            </Fragment>
-                        ))}
+                                            </ListItem>
+                                            <Divider variant="middle" />
+                                        </Fragment>
+                                    ))}
+                                </Fragment>
+                            ))}
                     </List>
                 </Grid >
             </Grid>

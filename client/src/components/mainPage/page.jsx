@@ -60,7 +60,8 @@ const MainPage = () => {
     const getTransactions = async () => {
         try {
             const result = await findUser(user._id);
-            setTransactions(result.transactions);
+            const sortedTransactions = result.transactions.sort((a, b) => dayjs(b.date) - dayjs(a.date));
+            setTransactions(sortedTransactions);
             console.log(result.transactions);
         } catch (error) {
             console.log(error);
@@ -91,8 +92,7 @@ const MainPage = () => {
             const gastos = transactionsOnDate.filter(transaction => transaction.transactionType === 'gasto').reduce((sum, transaction) => sum + transaction.amount, 0);
             return { date, ingresos, gastos };
         });
-
-        console.log(data);
+        
         return data;
     };
     const data = processTransactions(transactions);
@@ -104,7 +104,7 @@ const MainPage = () => {
             return formatoConPuntos(totalIngresos);
         } else if (type == "egresos") {
             return formatoConPuntos(totalEgresos);
-        }else{
+        } else {
             return formatoConPuntos(totalIngresos - totalEgresos);
         }
     }
@@ -146,7 +146,6 @@ const MainPage = () => {
                 }}>
                     <Typography variant="h5" sx={{ color: "#5C4C41", ml: 1 }}>Transacciones recientes</Typography>
                     {transactions
-                        .sort((a, b) => dayjs(b.date) - dayjs(a.date)) // Ordenar por fecha de manera descendente
                         .slice(0, 3) // Tomar solo las primeras 4 transacciones
                         .map((transaction, idx) => (
                             <ListItem
