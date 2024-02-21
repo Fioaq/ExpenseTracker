@@ -180,7 +180,6 @@ const ExpIncMain = ({ transactionType }) => {
                             Total de {transactionType}s:
                         </Typography>
                         <Typography variant="h4" sx={{ color: `${handleColor()}`, ml: 1 }}>
-                            {transactionType == "ingreso" ? `+ ` : `- `}
                             {handleTotal()}<AttachMoneyIcon />
                         </Typography>
                     </Box>
